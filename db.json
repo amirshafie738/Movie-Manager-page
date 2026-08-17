@@ -1,0 +1,49 @@
+{
+    "movies": [
+      {
+        "id": "1",
+        "title": "Inception",
+        "description": "A thief who steals corporate secrets through dream-sharing technology.",
+        "genre": "Sci-Fi",
+        "year": 2010,
+        "rating": 8.8,
+        "image": "https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg"
+      },
+      {
+        "id": "2",
+        "title": "Interstellar",
+        "description": "A team of explorers travel through a wormhole in space.",
+        "genre": "Sci-Fi",
+        "year": 2014,
+        "rating": 8.6,
+        "image": "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+      },
+      {
+        "id": "3",
+        "title": "The Dark Knight",
+        "description": "Batman faces a criminal mastermind known as the Joker.",
+        "genre": "Action",
+        "year": 2008,
+        "rating": 9,
+        "image": "https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg"
+      },
+      {
+        "id": "4",
+        "title": "The Shawshank Redemption",
+        "description": "Two imprisoned men bond over years and find redemption.",
+        "genre": "Drama",
+        "year": 1994,
+        "rating": 9.3,
+        "image": "https://image.tmdb.org/t/p/w500/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg"
+      },
+      {
+        "id": "5",
+        "title": "The Godfather",
+        "description": "The patriarch of an organized crime dynasty transfers control.",
+        "genre": "Crime",
+        "year": 1972,
+        "rating": 9.2,
+        "image": "https://image.tmdb.org/t/p/w500/3bhkrj58Vtu7enYsRolD1fZdja1.jpg"
+      }
+    ]
+  }
