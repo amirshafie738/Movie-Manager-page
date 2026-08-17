@@ -42,6 +42,7 @@ function MovieCart({ movie,index }: MovieCartProps) {
                 </div>
               </td>
 
+
               <td className="p-4">
                 <div className="flex gap-2">
                   <button className="rounded border p-2 cursor-pointer">
