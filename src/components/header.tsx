@@ -1,6 +1,10 @@
 import { Clapperboard, Heart,  } from "lucide-react";
+import type { Dispatch, SetStateAction } from "react";
 
-function Header() {
+interface IMovieForm {
+  setIsFormOpen: Dispatch<SetStateAction<boolean>>;
+}
+function Header({setIsFormOpen}:IMovieForm) {
   return (
     <header className="mb-6 flex flex-col  gap-3">
       <div className="flex items-center justify-between p-5 bg-slate-900 text-gray-200 ">
@@ -44,7 +48,7 @@ function Header() {
             <option>Crime</option>
           </select>
         </div>
-        <button className="btn btn-primary">+  Add Movie</button>
+        <button className="btn btn-primary" onClick={()=> setIsFormOpen(true)}>+  Add Movie</button>
       </div>
     </header>
   );
