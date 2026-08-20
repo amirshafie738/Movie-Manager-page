@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FormPage from "../components/Form";
-import Header from "../components/Header";
+import Header from "../components/header";
 import MovieList from "../components/MovieList";
 
 function HomePage() {

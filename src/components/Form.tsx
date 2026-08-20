@@ -2,6 +2,8 @@ import type { Dispatch, SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { movieSchema, type MovieFormData } from "../validation/movieSchema";
+import { queryClient } from "../main";
+import { usePostMovie } from "../services/api/movie";
 
 interface IMovieForm {
   setIsFormOpen: Dispatch<SetStateAction<boolean>>;
@@ -11,6 +13,7 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<MovieFormData>({
     resolver: zodResolver(movieSchema),
@@ -21,8 +24,23 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
     },
   });
 
+  const { mutate, isPending } = usePostMovie();
+
   function onSubmit(data: MovieFormData) {
-    console.log(data);
+    mutate(data, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["movies"],
+        });
+  
+        reset();
+        setIsFormOpen(false);
+      },
+  
+      onError: (error) => {
+        console.log(error);
+      },
+    });
   }
 
   return (
@@ -154,8 +172,8 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
             Cancel
           </button>
 
-          <button type="submit" className="btn btn-primary">
-            Add Movie
+          <button type="submit" className="btn btn-primary" disabled={isPending}>
+          {isPending ? "Adding..." : "Add Movie"}
           </button>
         </div>
       </form>
