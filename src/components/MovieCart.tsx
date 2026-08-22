@@ -1,10 +1,12 @@
 import { Heart, Pencil, Star, Trash2 } from "lucide-react";
 import type { Imovie } from "../types/movie";
-
+import type { RootState } from "../redux/store";
 import { useDeleteMovie } from "../hooks/useDeleteMovie";
 import { queryClient } from "../main";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startEdit } from "../redux/reducers/TodoCartRaducer";
+import { toggleFavorite } from "../redux/reducers/favoriteSlice";
+
 interface MovieCartProps {
   movie: Imovie;
   index: number;
@@ -12,6 +14,7 @@ interface MovieCartProps {
 }
 
 function MovieCart({ movie, index, setIsFormOpen }: MovieCartProps) {
+  // delete movie
   const { mutate, isPending } = useDeleteMovie();
   function handleDelete() {
     mutate(movie.id, {
@@ -24,6 +27,15 @@ function MovieCart({ movie, index, setIsFormOpen }: MovieCartProps) {
   }
 
   const dipatch = useDispatch();
+
+  // favorit 
+  const favorites = useSelector(
+    (state: RootState) => state.favorites.favorits
+  );
+  
+  const isFavorite = favorites.some(
+    (item) => item.id === movie.id
+  );
 
   return (
     <>
@@ -62,8 +74,8 @@ function MovieCart({ movie, index, setIsFormOpen }: MovieCartProps) {
 
           <td className="p-4">
             <div className="flex gap-2">
-              <button className="rounded border p-2 cursor-pointer">
-                <Heart size={18} />
+              <button  onClick={() => dipatch(toggleFavorite(movie))} className="rounded border p-2 cursor-pointer">
+                <Heart size={18} fill={isFavorite ? "red" : "none"} />
               </button>
 
               <button
