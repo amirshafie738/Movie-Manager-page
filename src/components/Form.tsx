@@ -1,14 +1,20 @@
-import type { Dispatch, SetStateAction } from "react";
+import { useEffect, type Dispatch, type SetStateAction } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { movieSchema, type MovieFormData } from "../validation/movieSchema";
 import { queryClient } from "../main";
 import { usePostMovie } from "../services/api/movie";
+import { useDispatch, useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
+
+import { cancelEdit } from "../redux/reducers/TodoCartRaducer";
+import { useUpdateMovie } from "../hooks/useUpdateMovie";
 
 interface IMovieForm {
   setIsFormOpen: Dispatch<SetStateAction<boolean>>;
 }
 
+// validation
 function FormPage({ setIsFormOpen }: IMovieForm) {
   const {
     register,
@@ -23,17 +29,50 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
       description: "",
     },
   });
+  //  fetch post
+  const { mutate: createMovie, isPending } = usePostMovie();
 
-  const { mutate, isPending } = usePostMovie();
+  const { mutate: updateMovie } =useUpdateMovie();
 
+  const dispatch = useDispatch()
+  
   function onSubmit(data: MovieFormData) {
-    mutate(data, {
+    if (selectedMovie) {
+      updateMovie(
+        {
+          id: selectedMovie.id,
+          data,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries({
+              queryKey: ["movies"],
+            });
+  
+            reset();
+  
+            dispatch(cancelEdit());
+  
+            setIsFormOpen(false);
+          },
+  
+          onError: (error) => {
+            console.log(error);
+          },
+        }
+      );
+  
+      return;
+    }
+  
+    createMovie(data, {
       onSuccess: () => {
         queryClient.invalidateQueries({
           queryKey: ["movies"],
         });
   
         reset();
+  
         setIsFormOpen(false);
       },
   
@@ -42,15 +81,42 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
       },
     });
   }
+  // information redux reducer
+  const selectedMovie = useSelector(
+    (state: RootState) => state.movie.selectedMovie
+  );
+  const isEditMode = !!selectedMovie;
+  useEffect(() => {
+    if (selectedMovie) {
+      reset({
+        title: selectedMovie.title,
+        genre: selectedMovie.genre,
+        year: selectedMovie.year,
+        rating: selectedMovie.rating,
+        description: selectedMovie.description,
+        image:selectedMovie.image
+      });
+    }
+  }, [selectedMovie, reset]);
 
+// close modal
+  function handleCloseForm() {
+    reset();
+  
+    dispatch(cancelEdit());
+  
+    setIsFormOpen(false);
+  }
   return (
     <div className="mb-6 rounded-lg border bg-base-100 p-6 shadow">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-bold">Add Movie</h2>
+        <h1 className="text-xl font-bold">
+          {isEditMode ? "Edit Movie" : "Add Movie"}
+        </h1>
 
         <button
           type="button"
-          onClick={() => setIsFormOpen(false)}
+          onClick={handleCloseForm}
           className="btn btn-sm btn-circle"
         >
           ✕
@@ -166,14 +232,18 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
         <div className="mt-4 flex justify-end gap-3">
           <button
             type="button"
-            onClick={() => setIsFormOpen(false)}
+            onClick={handleCloseForm}
             className="btn"
           >
             Cancel
           </button>
 
-          <button type="submit" className="btn btn-primary" disabled={isPending}>
-          {isPending ? "Adding..." : "Add Movie"}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isPending}
+          >
+            {isPending ? "Adding..." :  isEditMode ? "Update Movie" : "Add Movie"}
           </button>
         </div>
       </form>

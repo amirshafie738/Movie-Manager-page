@@ -2,8 +2,10 @@ import { useQuery } from "@tanstack/react-query";
 import { getMovies } from "../services/api/movie";
 import type { Imovie } from "../types/movie";
 import MovieCart from "./MovieCart";
-
-function MovieList() {
+interface MovieFormProps {
+  setIsFormOpen:React.Dispatch<React.SetStateAction<boolean>>;
+}
+function MovieList({setIsFormOpen}:MovieFormProps) {
   const {
     data: movies,
     isLoading,
@@ -35,7 +37,7 @@ function MovieList() {
             </tr>
           </thead>
           {movies.map((movie: Imovie,index:number) => (
-            <MovieCart key={movie.id} movie={movie} index={index}/>
+            <MovieCart key={movie.id} movie={movie} index={index} setIsFormOpen={setIsFormOpen}/>
           ))}
         </table>
       </div>

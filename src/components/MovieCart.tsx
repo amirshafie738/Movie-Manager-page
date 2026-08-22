@@ -3,12 +3,15 @@ import type { Imovie } from "../types/movie";
 
 import { useDeleteMovie } from "../hooks/useDeleteMovie";
 import { queryClient } from "../main";
+import { useDispatch } from "react-redux";
+import { startEdit } from "../redux/reducers/TodoCartRaducer";
 interface MovieCartProps {
   movie: Imovie;
   index: number;
+  setIsFormOpen:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function MovieCart({ movie, index }: MovieCartProps) {
+function MovieCart({ movie, index, setIsFormOpen }: MovieCartProps) {
   const { mutate, isPending } = useDeleteMovie();
   function handleDelete() {
     mutate(movie.id, {
@@ -17,12 +20,11 @@ function MovieCart({ movie, index }: MovieCartProps) {
           queryKey: ["movies"],
         });
       },
-
-      onError: (error) => {
-        console.log(error);
-      },
     });
   }
+
+  const dipatch = useDispatch();
+
   return (
     <>
       <tbody>
@@ -64,7 +66,13 @@ function MovieCart({ movie, index }: MovieCartProps) {
                 <Heart size={18} />
               </button>
 
-              <button className="rounded border p-2 cursor-pointer">
+              <button
+                onClick={() => {
+                  dipatch(startEdit(movie));
+                  setIsFormOpen(true);
+                }}
+                className="rounded border p-2 cursor-pointer"
+              >
                 <Pencil size={18} />
               </button>
 
