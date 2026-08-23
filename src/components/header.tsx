@@ -1,10 +1,15 @@
 import { Clapperboard, Heart,  } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../redux/store";
 
 interface IMovieForm {
   setIsFormOpen: Dispatch<SetStateAction<boolean>>;
 }
 function Header({setIsFormOpen}:IMovieForm) {
+
+const favoriteCount = useSelector((state:RootState)=> state.favorites.favorits.length)
+
   return (
     <header className="mb-6 flex flex-col  gap-3">
       <div className="flex items-center justify-between p-5 bg-slate-900 text-gray-200 ">
@@ -15,7 +20,7 @@ function Header({setIsFormOpen}:IMovieForm) {
         </h1>
         <div className="flex gap-2  justify-center items-center text-base ">
         <Heart  className="text-red-500" size={16} fill="red" />Favorites
-          <span >(0)</span>
+          <span >({favoriteCount})</span>
         </div>
       </div>
 

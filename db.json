@@ -44,15 +44,6 @@
       "year": 1972,
       "rating": 9.2,
       "image": "https://m.media-amazon.com/images/M/MV5BYTM3MjVjZjUtYTEyMi00OTA5LWExMzEtYjhhYmEyYzMzNTBiXkEyXkFqcGc@._V1_QL75_UX280_CR0,0,280,414_.jpg"
-    },
-    {
-      "title": "hassan",
-      "genre": "Crime",
-      "year": 2022,
-      "rating": 6,
-      "description": "wdawdawawdawdawdawdawdamir",
-      "image": "https://covers.openlibrary.org/b/id/8281993-L.jpg",
-      "id": "KenKwm-LPAk"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
