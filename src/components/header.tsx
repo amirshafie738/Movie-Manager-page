@@ -3,10 +3,12 @@ import type { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
 
-interface IMovieForm {
+interface IHeader {
   setIsFormOpen: Dispatch<SetStateAction<boolean>>;
+  search:string
+  setSearch: Dispatch<SetStateAction<string>>;
 }
-function Header({setIsFormOpen}:IMovieForm) {
+function Header({setIsFormOpen,search,setSearch}:IHeader) {
 
 const favoriteCount = useSelector((state:RootState)=> state.favorites.favorits.length)
 
@@ -43,7 +45,7 @@ const favoriteCount = useSelector((state:RootState)=> state.favorites.favorits.l
                 <path d="m21 21-4.3-4.3"></path>
               </g>
             </svg>
-            <input type="search" required placeholder="Search" />
+            <input type="search"  placeholder="Search"   value={search} onChange={(e) => setSearch(e.target.value)}/>
           </label>
 
           <select defaultValue="Pick a font" className="select select-ghost w-1/4">
