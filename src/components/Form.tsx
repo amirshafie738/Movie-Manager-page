@@ -6,7 +6,7 @@ import { queryClient } from "../main";
 import { usePostMovie } from "../services/api/movie";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
-
+import toast from "react-hot-toast";
 import { cancelEdit } from "../redux/reducers/TodoCartRaducer";
 import { useUpdateMovie } from "../hooks/useUpdateMovie";
 
@@ -29,13 +29,19 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
       description: "",
     },
   });
+   // information redux reducer
+   const selectedMovie = useSelector(
+    (state: RootState) => state.movie.selectedMovie
+  );
+
   //  fetch post
-  const { mutate: createMovie, isPending } = usePostMovie();
+  const { mutate: createMovie, isPending: iscreating } = usePostMovie();
 
-  const { mutate: updateMovie } =useUpdateMovie();
+  const { mutate: updateMovie, isPending: isupdating } = useUpdateMovie();
 
-  const dispatch = useDispatch()
-  
+  const isPending = iscreating || isupdating;
+  const dispatch = useDispatch();
+
   function onSubmit(data: MovieFormData) {
     if (selectedMovie) {
       updateMovie(
@@ -45,46 +51,44 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
         },
         {
           onSuccess: () => {
+            toast.success("Movie updated successfully!");
+
             queryClient.invalidateQueries({
               queryKey: ["movies"],
             });
-  
+
             reset();
-  
             dispatch(cancelEdit());
-  
             setIsFormOpen(false);
           },
-  
+
           onError: (error) => {
             console.log(error);
           },
         }
       );
-  
+
       return;
     }
-  
+
     createMovie(data, {
       onSuccess: () => {
+        toast.success("Movie added successfully!");
+
         queryClient.invalidateQueries({
           queryKey: ["movies"],
         });
-  
+
         reset();
-  
         setIsFormOpen(false);
       },
-  
+
       onError: (error) => {
         console.log(error);
       },
     });
   }
-  // information redux reducer
-  const selectedMovie = useSelector(
-    (state: RootState) => state.movie.selectedMovie
-  );
+ 
   const isEditMode = !!selectedMovie;
   useEffect(() => {
     if (selectedMovie) {
@@ -94,17 +98,17 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
         year: selectedMovie.year,
         rating: selectedMovie.rating,
         description: selectedMovie.description,
-        image:selectedMovie.image
+        image: selectedMovie.image,
       });
     }
   }, [selectedMovie, reset]);
 
-// close modal
+  // close modal
   function handleCloseForm() {
     reset();
-  
+
     dispatch(cancelEdit());
-  
+
     setIsFormOpen(false);
   }
   return (
@@ -230,11 +234,7 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
         )}
         {/* Buttons */}
         <div className="mt-4 flex justify-end gap-3">
-          <button
-            type="button"
-            onClick={handleCloseForm}
-            className="btn"
-          >
+          <button type="button" onClick={handleCloseForm} className="btn">
             Cancel
           </button>
 
@@ -243,7 +243,11 @@ function FormPage({ setIsFormOpen }: IMovieForm) {
             className="btn btn-primary"
             disabled={isPending}
           >
-            {isPending ? "Adding..." :  isEditMode ? "Update Movie" : "Add Movie"}
+            {isPending
+              ? "Adding..."
+              : isEditMode
+              ? "Update Movie"
+              : "Add Movie"}
           </button>
         </div>
       </form>
