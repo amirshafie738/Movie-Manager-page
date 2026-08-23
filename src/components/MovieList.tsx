@@ -4,16 +4,18 @@ import type { Imovie } from "../types/movie";
 import MovieCart from "./MovieCart";
 interface MovieFormProps {
   setIsFormOpen:React.Dispatch<React.SetStateAction<boolean>>;
+  search:string
 }
-function MovieList({setIsFormOpen}:MovieFormProps) {
+function MovieList({setIsFormOpen,search}:MovieFormProps) {
+
   const {
-    data: movies,
+    data:movies,
     isLoading,
     isError,
     error,
   } = useQuery({
-    queryKey: ["movies"],
-    queryFn: getMovies,
+    queryKey: ["movies", search],
+    queryFn: () => getMovies({ search }),
   });
   if (isLoading) {
     return <p>Loading</p>;
