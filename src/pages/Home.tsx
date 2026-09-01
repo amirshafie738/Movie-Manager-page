@@ -6,11 +6,12 @@ import MovieList from "../components/MovieList";
 function HomePage() {
   const [isFormOpen, setIsFormOpen] = useState<boolean>(false);
   const [search, setSearch] = useState("");
+  const [genre, setGenre] = useState("");
   return (
     <>
-      <Header setIsFormOpen={setIsFormOpen} search={search} setSearch={setSearch}/>
+      <Header setIsFormOpen={setIsFormOpen} search={search} setSearch={setSearch}  genre={genre} setGenre={setGenre}/>
       <main className="flex gap-4 justify-center items-center">
-        <MovieList setIsFormOpen={setIsFormOpen} search={search}/>
+        <MovieList setIsFormOpen={setIsFormOpen} search={search} genre={genre}/>
         {isFormOpen && (
           <div className="w-1/3">
             <FormPage setIsFormOpen={setIsFormOpen} />

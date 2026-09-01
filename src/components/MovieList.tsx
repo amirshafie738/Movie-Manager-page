@@ -4,9 +4,10 @@ import type { Imovie } from "../types/movie";
 import MovieCart from "./MovieCart";
 interface MovieFormProps {
   setIsFormOpen:React.Dispatch<React.SetStateAction<boolean>>;
-  search:string
+  search:string;
+  genre:string;
 }
-function MovieList({setIsFormOpen,search}:MovieFormProps) {
+function MovieList({setIsFormOpen,search,genre}:MovieFormProps) {
 
   const {
     data:movies,
@@ -14,8 +15,8 @@ function MovieList({setIsFormOpen,search}:MovieFormProps) {
     isError,
     error,
   } = useQuery({
-    queryKey: ["movies", search],
-    queryFn: () => getMovies({ search }),
+    queryKey: ["movies", search,genre],
+    queryFn: () => getMovies({ search,genre }),
   });
   if (isLoading) {
     return <p>Loading</p>;
