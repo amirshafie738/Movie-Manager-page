@@ -53,6 +53,15 @@
       "description": "daadwddwawdwadawdawdwaaddaw",
       "image": "https://covers.openlibrary.org/b/id/8281993-L.jpg",
       "id": "ictvwhJgw6I"
+    },
+    {
+      "title": "ali",
+      "genre": "Crime",
+      "year": 2021,
+      "rating": 6,
+      "description": "dddaawdawdawdaw",
+      "image": "https://covers.openlibrary.org/b/id/8281993-L.jpg",
+      "id": "T3KYcUmKyUc"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
