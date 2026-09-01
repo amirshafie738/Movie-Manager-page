@@ -4,17 +4,26 @@ import type { MovieFormData } from "../../validation/movieSchema";
 import { api } from "./axios";
 interface GetMoviesParams {
   search?: string;
+  genre?: string;
 }
 
-export async function getMovies({ search = "" }: GetMoviesParams) {
-  const response = await api.get("/movies", {
-    params: search
-      ? {
-          "title:contains": search,
-        }
-      : {},
-  });
+export async function getMovies({
+  search = "",
+  genre = "",
+}: GetMoviesParams) {
+  const params: Record<string, string> = {};
 
+  if (search.trim()) {
+    params["title:contains"] = search.trim();
+  }
+
+  if (genre) {
+    params.genre = genre;
+  }
+
+  const response = await api.get("/movies", {
+    params,
+  });
 
   return response.data;
 }

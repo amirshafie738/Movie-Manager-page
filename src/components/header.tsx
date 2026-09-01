@@ -1,16 +1,25 @@
-import { Clapperboard, Heart,  } from "lucide-react";
+import { Clapperboard, Heart } from "lucide-react";
 import type { Dispatch, SetStateAction } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "../redux/store";
 
 interface IHeader {
   setIsFormOpen: Dispatch<SetStateAction<boolean>>;
-  search:string
+  search: string;
   setSearch: Dispatch<SetStateAction<string>>;
+  genre: string;
+  setGenre: Dispatch<SetStateAction<string>>;
 }
-function Header({setIsFormOpen,search,setSearch}:IHeader) {
-
-const favoriteCount = useSelector((state:RootState)=> state.favorites.favorits.length)
+function Header({
+  setIsFormOpen,
+  search,
+  setSearch,
+  setGenre,
+  genre,
+}: IHeader) {
+  const favoriteCount = useSelector(
+    (state: RootState) => state.favorites.favorits.length
+  );
 
   return (
     <header className="mb-6 flex flex-col  gap-3">
@@ -21,8 +30,9 @@ const favoriteCount = useSelector((state:RootState)=> state.favorites.favorits.l
           Movie Manager
         </h1>
         <div className="flex gap-2  justify-center items-center text-base ">
-        <Heart  className="text-red-500" size={16} fill="red" />Favorites
-          <span >({favoriteCount})</span>
+          <Heart className="text-red-500" size={16} fill="red" />
+          Favorites
+          <span>({favoriteCount})</span>
         </div>
       </div>
 
@@ -45,17 +55,29 @@ const favoriteCount = useSelector((state:RootState)=> state.favorites.favorits.l
                 <path d="m21 21-4.3-4.3"></path>
               </g>
             </svg>
-            <input type="search"  placeholder="Search"   value={search} onChange={(e) => setSearch(e.target.value)}/>
+            <input
+              type="search"
+              placeholder="Search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </label>
 
-          <select defaultValue="Pick a font" className="select select-ghost w-1/4">
-            <option>All Genres</option>
-            <option>Sci-Fi</option>
-            <option>Drama</option>
-            <option>Crime</option>
+          <select
+            value={genre}
+            onChange={(e) => setGenre(e.target.value)}
+            className="select select-bordered"
+          >
+            <option value="">All Genres</option>
+            <option value="Sci-Fi">Sci-Fi</option>
+            <option value="Action">Action</option>
+            <option value="Drama">Drama</option>
+            <option value="Crime">Crime</option>
           </select>
         </div>
-        <button className="btn btn-primary" onClick={()=> setIsFormOpen(true)}>+  Add Movie</button>
+        <button className="btn btn-primary" onClick={() => setIsFormOpen(true)}>
+          + Add Movie
+        </button>
       </div>
     </header>
   );
